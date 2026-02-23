@@ -1,0 +1,14 @@
+# Windows system files
+[Tt]humbs.db
+desktop.ini
+
+# IDEs
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Misc
+.DS_Store
+node_modules/

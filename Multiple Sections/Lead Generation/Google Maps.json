@@ -1,0 +1,246 @@
+{
+  "name": "Google Maps",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://api.apify.com/v2/acts/compass~crawler-google-places/run-sync-get-dataset-items?token=<token>",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"includeWebResults\": false,\n    \"language\": \"ar\",\n    \"locationQuery\": \"Cairo, Egypt\",\n    \"maxCrawledPlacesPerSearch\": 100,\n    \"maxImages\": 0,\n    \"maximumLeadsEnrichmentRecords\": 0,\n    \"scrapeContacts\": false,\n    \"scrapeDirectories\": false,\n    \"scrapeImageAuthors\": false,\n    \"scrapePlaceDetailPage\": false,\n    \"scrapeReviewsPersonalData\": true,\n    \"scrapeTableReservationProvider\": false,\n    \"searchStringsArray\": [\n        \"مطاعم\"\n    ],\n    \"skipClosedPlaces\": false\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        320,
+        0
+      ],
+      "id": "57aee115-53d1-47c4-8e56-cc03474bc060",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "title",
+        "include": "selectedOtherFields",
+        "fieldsToInclude": "neighborhood, city, website, phoneUnformatted, totalScore, url",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        544,
+        0
+      ],
+      "id": "ffeccc71-15b9-4568-9381-cef917f302e9",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1znpmZvAmuv65rS1bf9u8EpIm6uMBdo_E_-v0gDEtJm0",
+          "mode": "list",
+          "cachedResultName": "نسخة من Google Map",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1znpmZvAmuv65rS1bf9u8EpIm6uMBdo_E_-v0gDEtJm0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1l1Q6S3z2u0XR-TLwzzp--2TDuRj1ZwIrZOsMdqvUscw/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "الاسم": "={{ $json.title }}",
+            "الحي": "={{ $json.neighborhood }}",
+            "الموقع الالكتروني": "={{ $json.website }}",
+            "رقم الهاتف": "={{ $json.phoneUnformatted }}",
+            "التقييم": "={{ $json.totalScore }}",
+            "اللوكيشن": "={{ $json.url }}",
+            "المدينة": "={{ $json.city }}"
+          },
+          "matchingColumns": [
+            "الاسم"
+          ],
+          "schema": [
+            {
+              "id": "الاسم",
+              "displayName": "الاسم",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "المدينة",
+              "displayName": "المدينة",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "رقم الهاتف",
+              "displayName": "رقم الهاتف",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "التقييم",
+              "displayName": "التقييم",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "اللوكيشن",
+              "displayName": "اللوكيشن",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "الحي",
+              "displayName": "الحي",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "الموقع الالكتروني",
+              "displayName": "الموقع الالكتروني",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        768,
+        0
+      ],
+      "id": "e4dbd7ee-e194-4788-af67-0d4f107b6552",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "dQKtX8PaIrEyQEFj",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "سحب بيانات الشركات من قوقل ماب",
+        "formDescription": "سحب جميع البيانات باستخدام الاحداثيات",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "البحث عن نشاط",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "الاحداثيات الاولى",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "الاحداثيات الثانية",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "المسافة 16 للأحياء و10 لكامل المدينة ",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "عدد الشركات المطلوبة",
+              "fieldType": "number",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c3992864-47da-44dd-aa7e-20a7ed5a2000",
+      "name": "On form submission",
+      "webhookId": "95e2e16c-45b8-4dc2-904d-78722eacc7ae"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "11d24c43-cc37-41f1-9ca8-67c4312c5d40",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d5733afe197e82d29995bb935b82e5081e675a494ed6f2f4e3a2e7cd9ec2ac39"
+  },
+  "id": "Cfvvk3JmIGioL4oL",
+  "tags": []
+}
